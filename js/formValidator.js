@@ -167,5 +167,7 @@ app.validator = app.validator || (function formTesterClosure() {
  * The form validator object.
  */
 app.formValidator = app.formValidator || (function formValidatorClosure() {
-  
+  var module = {};
+
+  return module;
 })();
