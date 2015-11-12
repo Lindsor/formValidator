@@ -102,7 +102,7 @@ app.validator = app.validator || (function formTesterClosure() {
    * @return {Boolean}       True if valid email, false otherwise.
    */
   module.isValidEmail = function(value) {
-    var emailRegex = /^(?:(?:[^<>()[\]\\.,;:\s@\"]+(?:\.[^<>()[\]\\.,;:\s@\"]+)*)|(?:\".+\"))@(?:(\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(?:(?:[a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailRegex = /^(?:(?:[^<>()\[\]\\.,;:\s@\"]+(?:\.[^<>()\[\]\\.,;:\s@\"]+)*)|(?:\".+\"))@(?:(\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(?:(?:[a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     return emailRegex.test(value);
   };
@@ -180,9 +180,9 @@ app.validator = app.validator || (function formTesterClosure() {
  *    - minLength: Checks the character length is more than or equal to the passed in length, ex: minLength:10.
  *    - maxLength: Checks the character length is less than or equal to the passed in length, ex: maxLength:10.
  *    - integer: Checks the value is a valid integer.
+ *    - float: Checks the value is a valid float.
+ *    - number: Checks the value is a valid integer or float.
  *    - NOT IMPLEMENTED YET:
- *      - float: Checks the value is a valid float.
- *      - number: Checks the value is a valid integer or float.
  *      - greaterThan: Checks the value is greater than the passed in value, ex: greaterThan:hello
  *      - smallerThan: Checks the value is smaller than the passed in value, ex: smallerThan:10
  *      - date: Checks the value is a valid date, optionally a format can be sent, ex: date:yyyy-mm-dd.
@@ -382,48 +382,45 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
         val = undefined;
       }
 
-      //Checks which type of error to check for.
-      //TODO: Make this into a dynamic check which checks the validator like:
-      //if typeof (validator["isValid" + type.upperFirst()] === 'function')
-      //Then run it.
-      switch (type.toLowerCase()) {
-        case validator.NOT_EMPTY:
-          if (!validator.isValidNotEmpty(inputValue)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
-        case validator.CONFIRM:
-          if (!validator.isValidConfirm((document.getElementById(val) || {}).value, inputValue)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
-        case validator.EMAIL:
-          if (!validator.isValidEmail(inputValue)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
-        case validator.INTEGER:
-          if (!validator.isValidInteger(inputValue)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
-        case validator.MAX_LENGTH:
-          if (!validator.isValidMaxLength(inputValue, val)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
-        case validator.MIN_LENGTH:
-          if (!validator.isValidMinLength(inputValue, val)) {
-            _displayError(input, type);
-            return false;
-          }
-          break;
+      //Run the correct validation, if it does not pass, display error on the correct input.
+      if (!_runCorrectValidation(type, inputValue, val)) {
+        _displayError(input, type);
+        return false;
       }
+    }
+    return true;
+  }
+
+  /**
+   * Decides which validation to use based on the passed in parameters.
+   * First it checks for manual assignment of which validation to use,
+   * if manual assignment not found then tries to guess which one to use based on the passed in type.
+   * @param  {String} type            The type of validation to run.
+   * @param  {String} validationValue The actual value that will be validated.
+   * @param  {String} parameter       An extra parameter to send into the validation function.
+   * @return {Boolean}                True if validated, false otherwise.
+   */
+  function _runCorrectValidation(type, validationValue, parameter) {
+    var validationFunction = "isValid" + type.charAt(0).toUpperCase() + type.slice(1),
+        validate = validator[validationFunction];
+
+    //Manual validations go here, ones that dont have a isValid<type> function.
+    //Validations that also need some extra logic should go here to ensure they work.
+    switch (type.toLowerCase()) {
+      case validator.CONFIRM:
+        //If the value is not set send a console warning.
+        if (typeof parameter === "undefined") {
+          console.log("The 'confirm' directive needs to be passed in the id of the element to confirm with.");
+        }
+        return validator.isValidEqual((document.getElementById(parameter) || {}).value, validationValue);
+        break;
+    }
+
+    //Try to guess the which validation function to use.
+    if (typeof validate === "function") {
+      return validate(validationValue, parameter);
+    } else {
+      console.log("Could not find a validation function for the passed in validation type of: %s.\nMake sure the validator object has a function called %s.\nOr add a custom validation method in the _runCorrectValidation function.", type, validationFunction);
     }
 
     return true;
@@ -449,4 +446,6 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
   };
 
   return module;
-})()._initialize();
+})();
+
+app.formValidator._initialize();
