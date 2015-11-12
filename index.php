@@ -8,6 +8,12 @@
     <meta charset="utf-8">
     <title>Form Validator Tests</title>
     <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.20.0.css">
+
+    <style>
+      .error {
+        outline: 1px solid red;
+      }
+    </style>
   </head>
 
   <body>
@@ -16,9 +22,9 @@
     <br>
     <hr>
     <br>
-    <form class="js-form-validate" action="/test" method="get" target="_blank">
+    <form class="js-form-validate" data-error-class="error" action="/test" method="get" target="_blank">
       <label>Not Empty<br>
-        <input type="text" class="js-validate-field" data-validation="notEmpty;test" data-errors="notEmpty:Please Type something in." placeholder="Not Empty">
+        <input type="text" class="js-validate-field" data-validation="notEmpty" data-errors="notEmpty:Please Type something in." placeholder="Not Empty">
         <p class="js-validate-error"></p>
       </label>
       <br>

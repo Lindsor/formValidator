@@ -167,6 +167,7 @@ app.validator = app.validator || (function formTesterClosure() {
  * Validates a form, the validation types are set in the HTML by using data-attributes.
  * To use:
  *  - Add a class of js-form-validate to the root form.
+ *  - Add an attribute of data-error-class with a semi-colon seperated string of classes to add on error.
  *  - Add class of js-validate-field to the inputs you wish to validate.
  *  - The element which will hold the error message is chosen in one of two ways:
  *    - Add a data-error-element attribute with the id of the element which should display the error.
@@ -201,7 +202,8 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
    */
   var separators = {
     types: ";",
-    properties: ":"
+    properties: ":",
+    errorClasses: ";"
   };
 
   /**
@@ -221,7 +223,8 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
   var data = {
     validation: "data-validation",
     errorElement: "data-error-element",
-    errors: "data-errors"
+    errors: "data-errors",
+    errorClass: "data-error-class"
   };
 
   /**
@@ -314,6 +317,9 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
   function _clearError(input) {
     var errorElement = _getErrorElement(input);
 
+    //Clear the error classes
+    _removeErrorClasses(input);
+
     //If no error element do nothing.
     if (typeof errorElement === 'undefined') {
       return false;
@@ -324,8 +330,37 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
   }
 
   /**
-   * Displays the error message based on the data getAttributes.
-   * data-errors = a list of comma seperated errors and their messages.
+   * Gets the error classes from the passed in form element.
+   * @param  {Object} form The form element to get the classes from.
+   * @return {Array}       An array of error classes.
+   */
+  function _getErrorClasses(form) {
+    return (form.getAttribute(data.errorClass) || "").split(separators.errorClasses);
+  }
+
+  //Removes the error classes from the input field.
+  function _removeErrorClasses(input) {
+    var errorClasses = _getErrorClasses(input.form),
+      replaceRegex = new RegExp(errorClasses.join("|"), "g");
+
+    input.className = input.className.replace(replaceRegex, "");
+  }
+
+  /**
+   * Adds the error classes to the passed in input if any are provided in the root form.
+   * @param {Object} input The DOM input object.
+   */
+  function _addErrorClasses(input) {
+    var errorClasses = _getErrorClasses(input.form),
+      classes = input.className.split(" ");
+
+    classes.push(errorClasses.join(" "));
+    input.className = classes.join(" ");
+  }
+
+  /**
+   * Displays the error message based on the data attributes.
+   * data-errors = a list of semi-comma seperated errors and their messages.
    * @param  {Object} input The input DOM object.
    * @param  {String} the error type.
    */
@@ -340,7 +375,7 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
       return false;
     }
 
-    //Loop through the errors and diaplay the 
+    //Loop through the errors and diaplay the message in the error element.
     for (var i = 0, l = errors.length; i < l; i++) {
       error = errors[i].split(separators.properties);
       message = error[1];
@@ -348,6 +383,7 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
 
       if (error.toLowerCase() === type.toLowerCase()) {
         errorElement.innerHTML = message;
+        _addErrorClasses(input);
         return true;
       }
     }
@@ -402,7 +438,7 @@ app.formValidator = app.formValidator || (function formValidatorClosure() {
    */
   function _runCorrectValidation(type, validationValue, parameter) {
     var validationFunction = "isValid" + type.charAt(0).toUpperCase() + type.slice(1),
-        validate = validator[validationFunction];
+      validate = validator[validationFunction];
 
     //Manual validations go here, ones that dont have a isValid<type> function.
     //Validations that also need some extra logic should go here to ensure they work.
