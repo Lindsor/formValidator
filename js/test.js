@@ -1,8 +1,8 @@
-(function testClosure(test) {
+(function testClosure(q) {
   'use strict';
 
   //Test the global config variables.
-  test.test("Global Configs", function isValidEmptyClosure(assert) {
+  q.test("Global Configs", function isValidEmptyClosure(assert) {
     var validator = app.validator;
 
     Object.keys(validator).forEach(function(key) {
@@ -22,7 +22,7 @@
   });
 
   //Test the isValidEmpty function.
-  test.test("isValidEmpty", function isValidEmptyClosure(assert) {
+  q.test("isValidEmpty", function isValidEmptyClosure(assert) {
     assert.equal(app.validator.isValidEmpty(""), true, "Passing in: ' '.");
     assert.equal(app.validator.isValidEmpty(" "), false, "Passing in: <space>.");
     assert.equal(app.validator.isValidEmpty("a"), false, "Passing in: 'a'.");
@@ -37,7 +37,7 @@
   });
 
   //Test the isValidNotEmpty function.
-  test.test("isValidNotEmpty", function isValidNotEmptyClosure(assert) {
+  q.test("isValidNotEmpty", function isValidNotEmptyClosure(assert) {
     assert.equal(app.validator.isValidNotEmpty(""), false, "Passing in: ' '.");
     assert.equal(app.validator.isValidNotEmpty(" "), true, "Passing in: <space>.");
     assert.equal(app.validator.isValidNotEmpty("a"), true, "Passing in: 'a'.");
@@ -52,7 +52,7 @@
   });
 
   //Test the isValidEqual function.
-  test.test("isValidEqual", function isValidEqualClosure(assert) {
+  q.test("isValidEqual", function isValidEqualClosure(assert) {
     assert.equal(app.validator.isValidEqual("", ""), true, "Passing in: ' ', ' '.");
     assert.equal(app.validator.isValidEqual(" ", " "), true, "Passing in: <space>, <space>.");
     assert.equal(app.validator.isValidEqual(" ", ""), false, "Passing in: <space>, ' '.");
@@ -69,7 +69,7 @@
   });
 
   //Test the isValidEmail function.
-  test.test("isValidEmail", function isValidEmailClosure(assert) {
+  q.test("isValidEmail", function isValidEmailClosure(assert) {
     assert.equal(app.validator.isValidEmail(""), false, "Passing in: ' '.");
     assert.equal(app.validator.isValidEmail(" "), false, "Passing in: <space>.");
     assert.equal(app.validator.isValidEmail("a"), false, "Passing in: 'a'.");
@@ -81,11 +81,11 @@
     assert.equal(app.validator.isValidEmail(NaN), false, "Passing in: NaN.");
     assert.equal(app.validator.isValidEmail(true), false, "Passing in: true.");
     assert.equal(app.validator.isValidEmail(false), false, "Passing in: false.");
-    assert.equal(app.validator.isValidEmail("tester.test@test.com"), true, "Passing in: 'tester.test@test.com'.");
+    assert.equal(app.validator.isValidEmail("tester.test@q.com"), true, "Passing in: 'tester.test@q.com'.");
   });
 
   //Test the isValidInteger function.
-  test.test("isValidInteger", function isValidIntegerClosure(assert) {
+  q.test("isValidInteger", function isValidIntegerClosure(assert) {
     assert.equal(app.validator.isValidInteger(""), false, "Passing in: ' '.");
     assert.equal(app.validator.isValidInteger(" "), false, "Passing in: <space>.");
     assert.equal(app.validator.isValidInteger("a"), false, "Passing in: 'a'.");
@@ -105,11 +105,11 @@
     assert.equal(app.validator.isValidInteger(NaN), false, "Passing in: NaN.");
     assert.equal(app.validator.isValidInteger(true), false, "Passing in: true.");
     assert.equal(app.validator.isValidInteger(false), false, "Passing in: false.");
-    assert.equal(app.validator.isValidInteger("tester.test@test.com"), false, "Passing in: 'tester.test@test.com'.");
+    assert.equal(app.validator.isValidInteger("tester.test@q.com"), false, "Passing in: 'tester.test@q.com'.");
   });
 
   //Test the isValidFloat function.
-  test.test("isValidFloat", function isValidFloatClosure(assert) {
+  q.test("isValidFloat", function isValidFloatClosure(assert) {
     assert.equal(app.validator.isValidFloat(""), false, "Passing in: ' '.");
     assert.equal(app.validator.isValidFloat(" "), false, "Passing in: <space>.");
     assert.equal(app.validator.isValidFloat("a"), false, "Passing in: 'a'.");
@@ -129,11 +129,11 @@
     assert.equal(app.validator.isValidFloat(NaN), false, "Passing in: NaN.");
     assert.equal(app.validator.isValidFloat(true), false, "Passing in: true.");
     assert.equal(app.validator.isValidFloat(false), false, "Passing in: false.");
-    assert.equal(app.validator.isValidFloat("tester.test@test.com"), false, "Passing in: 'tester.test@test.com'.");
+    assert.equal(app.validator.isValidFloat("tester.test@q.com"), false, "Passing in: 'tester.test@q.com'.");
   });
 
   //Test the isValidNumber function.
-  test.test("isValidNumber", function isValidNumberClosure(assert) {
+  q.test("isValidNumber", function isValidNumberClosure(assert) {
     assert.equal(app.validator.isValidNumber(""), false, "Passing in: ' '.");
     assert.equal(app.validator.isValidNumber(" "), false, "Passing in: <space>.");
     assert.equal(app.validator.isValidNumber("a"), false, "Passing in: 'a'.");
@@ -155,11 +155,11 @@
     assert.equal(app.validator.isValidNumber(NaN), false, "Passing in: NaN.");
     assert.equal(app.validator.isValidNumber(true), false, "Passing in: true.");
     assert.equal(app.validator.isValidNumber(false), false, "Passing in: false.");
-    assert.equal(app.validator.isValidNumber("tester.test@test.com"), false, "Passing in: 'tester.test@test.com'.");
+    assert.equal(app.validator.isValidNumber("tester.test@q.com"), false, "Passing in: 'tester.test@q.com'.");
   });
 
   //Test the isValidMaxLength function.
-  test.test("isValidMaxLength", function isValidMaxLengthClosure(assert) {
+  q.test("isValidMaxLength", function isValidMaxLengthClosure(assert) {
     assert.equal(app.validator.isValidMaxLength("", 10), true, "Passing in: ' ', 10.");
     assert.equal(app.validator.isValidMaxLength(" ", 10), true, "Passing in: <space>, 10.");
     assert.equal(app.validator.isValidMaxLength("a", 10), true, "Passing in: 'a', 10.");
@@ -181,7 +181,7 @@
     assert.equal(app.validator.isValidMaxLength(NaN, 10), true, "Passing in: NaN, 10.");
     assert.equal(app.validator.isValidMaxLength(true, 10), true, "Passing in: true, 10.");
     assert.equal(app.validator.isValidMaxLength(false, 10), true, "Passing in: false, 10.");
-    assert.equal(app.validator.isValidMaxLength("tester.test@test.com", 30), true, "Passing in: 'tester.test@test.com', 30.");
+    assert.equal(app.validator.isValidMaxLength("tester.test@q.com", 30), true, "Passing in: 'tester.test@q.com', 30.");
     assert.equal(app.validator.isValidMaxLength("", 0), true, "Passing in: ' ', 10.");
     assert.equal(app.validator.isValidMaxLength(" ", 0), false, "Passing in: <space>, 10.");
     assert.equal(app.validator.isValidMaxLength("a", 0), false, "Passing in: 'a', 10.");
@@ -203,11 +203,11 @@
     assert.equal(app.validator.isValidMaxLength(NaN, 0), false, "Passing in: NaN, 10.");
     assert.equal(app.validator.isValidMaxLength(true, 0), false, "Passing in: true, 10.");
     assert.equal(app.validator.isValidMaxLength(false, 0), false, "Passing in: false, 10.");
-    assert.equal(app.validator.isValidMaxLength("tester.test@test.com", 0), false, "Passing in: 'tester.test@test.com', 30.");
+    assert.equal(app.validator.isValidMaxLength("tester.test@q.com", 0), false, "Passing in: 'tester.test@q.com', 30.");
   });
 
   //Test the isValidMinLength function.
-  test.test("isValidMinLength", function isValidMinLengthClosure(assert) {
+  q.test("isValidMinLength", function isValidMinLengthClosure(assert) {
     assert.equal(app.validator.isValidMinLength("", 10), false, "Passing in: ' ', 10.");
     assert.equal(app.validator.isValidMinLength(" ", 10), false, "Passing in: <space>, 10.");
     assert.equal(app.validator.isValidMinLength("a", 10), false, "Passing in: 'a', 10.");
@@ -229,7 +229,7 @@
     assert.equal(app.validator.isValidMinLength(NaN, 10), false, "Passing in: NaN, 10.");
     assert.equal(app.validator.isValidMinLength(true, 10), false, "Passing in: true, 10.");
     assert.equal(app.validator.isValidMinLength(false, 10), false, "Passing in: false, 10.");
-    assert.equal(app.validator.isValidMinLength("tester.test@test.com", 30), false, "Passing in: 'tester.test@test.com', 30.");
+    assert.equal(app.validator.isValidMinLength("tester.test@q.com", 30), false, "Passing in: 'tester.test@q.com', 30.");
     assert.equal(app.validator.isValidMinLength("", 0), true, "Passing in: ' ', 0.");
     assert.equal(app.validator.isValidMinLength(" ", 0), true, "Passing in: <space>, 0.");
     assert.equal(app.validator.isValidMinLength("a", 0), true, "Passing in: 'a', 0.");
@@ -251,6 +251,6 @@
     assert.equal(app.validator.isValidMinLength(NaN, 0), true, "Passing in: NaN, 0.");
     assert.equal(app.validator.isValidMinLength(true, 0), true, "Passing in: true, 0.");
     assert.equal(app.validator.isValidMinLength(false, 0), true, "Passing in: false, 0.");
-    assert.equal(app.validator.isValidMinLength("tester.test@test.com", 0), true, "Passing in: 'tester.test@test.com', 0.");
+    assert.equal(app.validator.isValidMinLength("tester.test@q.com", 0), true, "Passing in: 'tester.test@q.com', 0.");
   });
 })(QUnit);

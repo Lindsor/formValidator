@@ -139,7 +139,7 @@ app.validator = app.validator || (function formTesterClosure() {
   };
 
   /**
-   * Checks to make sure the value is less then or equal to the length.
+   * Checks to make sure the value length is less then or equal to the length.
    * @param  {String}   value  The value to check for max length.
    * @param  {Numeric}  length The max length allowed.
    * @return {Boolean}         True if within max length, false otherwise.
@@ -150,7 +150,7 @@ app.validator = app.validator || (function formTesterClosure() {
   };
 
   /**
-   * Checks to make sure the value is greater then or equal to the length.
+   * Checks to make sure the value length is greater then or equal to the length.
    * @param  {String}   value  The value to check for min length.
    * @param  {Numeric}  length The min length allowed.
    * @return {Boolean}         True if within min length, false otherwise.
